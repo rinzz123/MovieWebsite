@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Home</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travello template project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/popper.min.js' %}" ></script>
+
+
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+<link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/about.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/about_responsive.css' %}">
+
+	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+
+
+</head>
+<body>
+
+<div class="super_container">
+
+	<!-- Header -->
+
+	<header class="header">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="header_content d-flex flex-row align-items-center justify-content-start">
+						<div class="header_content_inner d-flex flex-row align-items-end justify-content-start">
+							<div class="logo"><a href="{% static 'index.html' %}">Movie Website</a></div>
+
+							<nav class="main_nav">
+								<ul class="d-flex flex-row align-items-start justify-content-start">
+									<li><a href="#">Home</a></li>
+
+									<ul class="dropdown-menu">
+									<li class="active" href="{% url 'movieapp:allMovieCat' %}">Movies</a></li>
+									{% for cat in links %}
+
+             						 <li><a class="dropdown-item" href="{{cat.get_url}}">{{cat.name}}</a></li>
+           								{% endfor %}
+										</ul>
+
+<!--<li class="nav-item dropdown">-->
+<!--        <a class="nav-link dropdown-toggle" href="{% url 'movieapp:allMovieCat' %}">-->
+<!--          Movie-->
+<!--        </a>-->
+<!--	{% for cat in links %}-->
+<!--          <a class="dropdown-item" href="{{cat.get_url}}">{{cat.name}}</a>-->
+<!--          {% endfor %}-->
+<!--      </li>-->
+
+<li class="nav-item dropdown" >
+    <a class="link dropdown-toggle" href="{% url 'movieapp:allMovieCat' %}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Movie
+    </a>
+    <div class="dropdown-menu" style="background-color: #000;"  aria-labelledby="navbarDropdown">
+        {% for cat in links %}
+        <a class="dropdown-item" href="{{cat.get_url}}">{{cat.name}}</a>
+        {% endfor %}
+    </div>
+</li>
+
+									{% if user.is_authenticated %}
+									<li style="color:red;">Hello {{user.username}}</li>
+
+									<li><a href="{% url 'credentials:logout' %}">Logout</a></li>
+								{% endif %}
+
+									    <button class="btn btn-outline-danger" type="button" onclick="window.location.href='{% url 'movieupdate:add' %}'">Add Movies</button>
+
+
+								</ul>
+
+								<form class="form-inline my-2 my-lg-0" action="{% url 'search_app:SearchResult' %}" method="get">
+                                {% csrf_token %}
+                                    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
+                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                 </form>
+
+							</nav>
+
+							<!-- Hamburger -->
+
+							<div class="hamburger ml-auto">
+								<i class="fa fa-bars" aria-hidden="true"></i>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</header>
+
+	<!-- Menu -->
+
+
+
+	<!-- Home -->
+
+	<div class="home">
+		<div class="background_image" style="background-image:url({% static 'images/movie_temp.jpg' %})"></div>
+	</div>
+
+<div>
+	<div>
+
+	</div>
+</div>
+
+	{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div class="mx-auto">
+        <p><a href="{% url 'movieapp:allMovieCat' %}">Our {{category.name}} movie collections</a></p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="mx_auto">
+   {% if category %}
+<!--    <img style="width:100%;height:auto;" src="{{category.image.url}}" alt="{{category.name}}">-->
+<!--    </div>-->
+<!--<br>-->
+<div>
+   <h1 class="text-center my_title">{{category.name}}</h1>
+   <p>{{category.description}}</p>
+</div>
+{% else %}
+<!--<div>-->
+<!--    <img class=" my_image_padding" src="{% static 'image/intro.png' %}" alt="Our Movies" width="100%">-->
+<!--</div>-->
+<br>
+<div>
+   <h1 class="text-center my_title">Movies</h1>
+   <p class="text-justify">Websites within the movie industry are typically used to promote projects, drum up hype, and dish out news about casting, filming, and other intriguing aspects of production.</p>
+</div>
+{% endif %}
+
+
+<div class="container" style="padding: 16px;">
+    <div class="row mx-auto">
+        {% for movie in movies.object_list %}
+        <div class="my_bottom_margin col-sm-12 col-md-4 col-md-12 col-lg-3">
+
+            <div class="card text-center" style="min-width: 18rem;">
+  <a href="{{movie.get_url}}"><img class="card-img-top" src="{{movie.poster.url}}" alt="{{movie.name}}" width="200px" height="200px"></a>
+  <div class="card-body">
+    <h4 class="card-title" >{{movie.name}}</h4>
+    <p class="card-text">{{movie.description}}</p>
+	  <a href=" " class="card-text">{{movie.link}}</a>
+  </div>
+</div> <BR>
+
+        </div>
+        {% endfor %}
+    </div>
+
+
+<div class="mx-auto">
+        {% if movies.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in movies.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm
+                {% if movies.number == pg %} active {% endif %}">{{pg}}
+            </a>
+            {% endfor %}
+        </div>
+         {% endif %}
+    </div>
+
+    <nav aria-label="...">
+  <ul class="pagination pagination-sm">
+     </ul>
+	</nav>
+    <br>
+</div>
+
+
+
+<footer>
+		<div class="col text-center"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --> </div>
+
+	</footer>
+</div>
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
